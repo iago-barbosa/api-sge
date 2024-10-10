@@ -54,4 +54,43 @@ public class DisciplinaDAO {
         }
         return lista;
     }
+    
+    public List<Disciplina> lerDisciplinasProfessores(int id_professor) {
+        List<Disciplina> lista = new ArrayList();
+        try {
+            Connection conn = Conexao.conectar();
+            PreparedStatement stmt = null;
+            ResultSet rs = null;
+            
+            stmt = conn.prepareStatement("SELECT d.id_disciplina, d.nome_disciplina, \n" +
+                "a.id_area, a.nome, a.descricao \n" +
+                "FROM disciplina AS d\n" +
+                "INNER JOIN professor_disciplina AS pd ON pd.fk_id_disciplina = d.id_disciplina\n" +
+                "INNER JOIN area AS a ON a.id_area = d.fk_id_area\n" +
+                "WHERE pd.fk_id_professor = ?");
+            stmt.setInt(1, id_professor);
+            
+            rs = stmt.executeQuery();
+            
+            while(rs.next()) {
+                Disciplina dis = new Disciplina();
+                dis.setId_disciplina(rs.getInt("id_disciplina"));
+                dis.setNome_disciplina(rs.getString("nome_disciplina"));
+                
+                // Inicio do objeto area
+                Area area = new Area();
+                area.setId(rs.getInt("id_area"));
+                area.setNome(rs.getString("nome"));
+                area.setDescricao(rs.getString("descricao"));
+                dis.setArea(area);
+                
+                lista.add(dis);
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+    
+
 }

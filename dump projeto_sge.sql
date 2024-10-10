@@ -1,223 +1,303 @@
-CREATE DATABASE  IF NOT EXISTS `projeto_sge` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+CREATE DATABASE IF NOT EXISTS `projeto_sge` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 USE `projeto_sge`;
--- MySQL dump 10.13  Distrib 5.6.23, for Win64 (x86_64)
---
--- Host: localhost    Database: projeto_sge
--- ------------------------------------------------------
--- Server version	5.6.14
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `alunos`
---
-
-DROP TABLE IF EXISTS `alunos`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `alunos` (
-  `id_alunos` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(100) NOT NULL,
-  `sobrenome` varchar(100) NOT NULL,
-  `cpf` varchar(45) NOT NULL,
-  `senha` varchar(45) NOT NULL,
-  `alunoscol` varchar(45) NOT NULL,
-  `imagem` text NOT NULL,
-  PRIMARY KEY (`id_alunos`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `alunos`
---
-
-LOCK TABLES `alunos` WRITE;
-/*!40000 ALTER TABLE `alunos` DISABLE KEYS */;
-INSERT INTO `alunos` VALUES (1,'Carlos','Silva','12345678901','senha123','123456','url_da_imagem_1'),(2,'Maria','Santos','23456789012','senha456','234567','url_da_imagem_2'),(3,'João','Pereira','34567890123','senha789','345678','url_da_imagem_3');
-/*!40000 ALTER TABLE `alunos` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `area`
---
-
-DROP TABLE IF EXISTS `area`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `area` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(50) NOT NULL,
-  `descricao` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `area`
---
-
-LOCK TABLES `area` WRITE;
-/*!40000 ALTER TABLE `area` DISABLE KEYS */;
-INSERT INTO `area` VALUES (2,'matematica',''),(3,'portugues',''),(4,'geografia','');
-/*!40000 ALTER TABLE `area` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `disciplina`
---
-
-DROP TABLE IF EXISTS `disciplina`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `disciplina` (
-  `id_disciplina` int(11) NOT NULL AUTO_INCREMENT,
-  `nome_disciplina` varchar(100) NOT NULL,
-  `fk_id_area` int(11) NOT NULL,
-  PRIMARY KEY (`id_disciplina`),
-  KEY `fk_id_area_idx` (`fk_id_area`),
-  CONSTRAINT `fk_id_area` FOREIGN KEY (`fk_id_area`) REFERENCES `area` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `disciplina`
---
-
-LOCK TABLES `disciplina` WRITE;
-/*!40000 ALTER TABLE `disciplina` DISABLE KEYS */;
-INSERT INTO `disciplina` VALUES (1,'Álgebra',2),(2,'Literatura',3),(3,'História',4);
-/*!40000 ALTER TABLE `disciplina` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `notas`
---
-
-DROP TABLE IF EXISTS `notas`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `notas` (
-  `id_notas` int(11) NOT NULL AUTO_INCREMENT,
-  `nota` float NOT NULL,
-  `fk_id_alunos` int(11) NOT NULL,
-  `fk_id_disciplina` int(11) NOT NULL,
-  PRIMARY KEY (`id_notas`),
-  KEY `fk_id_alunos_idx` (`fk_id_alunos`),
-  KEY `fk_id_disciplina_idx` (`fk_id_disciplina`),
-  CONSTRAINT `fk_id_alunos` FOREIGN KEY (`fk_id_alunos`) REFERENCES `alunos` (`id_alunos`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `notas`
---
-
-LOCK TABLES `notas` WRITE;
-/*!40000 ALTER TABLE `notas` DISABLE KEYS */;
-INSERT INTO `notas` VALUES (1,8.5,1,1),(2,7,2,2),(3,9,3,3);
-/*!40000 ALTER TABLE `notas` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `professor`
---
-
-DROP TABLE IF EXISTS `professor`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `professor` (
-  `id_professor` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(100) NOT NULL,
-  `sobrenome` varchar(100) NOT NULL,
-  `senha` varchar(45) NOT NULL,
-  `cpf` varchar(11) NOT NULL,
-  `imagens` varchar(255) NOT NULL,
-  PRIMARY KEY (`id_professor`),
-  UNIQUE KEY `cpf_UNIQUE` (`cpf`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `professor`
---
-
-LOCK TABLES `professor` WRITE;
-/*!40000 ALTER TABLE `professor` DISABLE KEYS */;
-INSERT INTO `professor` VALUES (9,'vini','','1','12345678910',''),(14,'Robertinho Loko','','123','1','assets/Captura de tela 2024-09-12 152246.png'),(17,'troll','','123','1234','assets/download.png'),(18,'lasgosta','','123','12345','assets/lagosta.jpg'),(19,'Ana','Lima','senhaAna','98765432100','url_imagem_professor_1'),(20,'Pedro','Almeida','senhaPedro','87654321009','url_imagem_professor_2');
-/*!40000 ALTER TABLE `professor` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `professor_disciplina`
---
-
-DROP TABLE IF EXISTS `professor_disciplina`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `professor_disciplina` (
-  `fk_id_professor` int(11) NOT NULL,
-  `fk_id_disciplina` int(11) NOT NULL,
-  KEY `fk_id_professor_idx` (`fk_id_professor`),
-  KEY `fk_id_disciplina_idx` (`fk_id_disciplina`),
-  CONSTRAINT `fk_id_disciplina` FOREIGN KEY (`fk_id_disciplina`) REFERENCES `disciplina` (`id_disciplina`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_id_professor` FOREIGN KEY (`fk_id_professor`) REFERENCES `professor` (`id_professor`) ON DELETE NO ACTION ON UPDATE NO ACTION
+-- Tabela Alunos
+CREATE TABLE alunos (
+  id_alunos INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(100) NOT NULL,
+  sobrenome VARCHAR(100) NOT NULL,
+  cpf VARCHAR(45) NOT NULL,
+  senha VARCHAR(45) NOT NULL,
+  imagem VARCHAR(255),
+  PRIMARY KEY (id_alunos)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `professor_disciplina`
---
-
-LOCK TABLES `professor_disciplina` WRITE;
-/*!40000 ALTER TABLE `professor_disciplina` DISABLE KEYS */;
-INSERT INTO `professor_disciplina` VALUES (20,1),(19,2),(18,3),(17,2),(14,1),(9,3);
-/*!40000 ALTER TABLE `professor_disciplina` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tarefa`
---
-
-DROP TABLE IF EXISTS `tarefa`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tarefa` (
-  `id_tarefa` int(11) NOT NULL AUTO_INCREMENT,
-  `nome_tarefa` varchar(100) NOT NULL,
-  `descricao` text NOT NULL,
-  `data_entrega` date NOT NULL,
-  `id_disciplina` int(11) NOT NULL,
-  PRIMARY KEY (`id_tarefa`),
-  KEY `id_disciplina_idx` (`id_disciplina`),
-  CONSTRAINT `id_disciplina` FOREIGN KEY (`id_disciplina`) REFERENCES `disciplina` (`id_disciplina`) ON DELETE NO ACTION ON UPDATE NO ACTION
+-- Tabela Áreas
+CREATE TABLE area (
+  id_area INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(50) NOT NULL,
+  descricao TEXT NOT NULL,
+  PRIMARY KEY (id_area)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `tarefa`
---
+-- Tabela Disciplinas
+CREATE TABLE disciplina (
+  id_disciplina INT NOT NULL AUTO_INCREMENT,
+  nome_disciplina VARCHAR(100) NOT NULL,
+  fk_id_area INT NOT NULL,
+  PRIMARY KEY (id_disciplina),
+  FOREIGN KEY (fk_id_area) REFERENCES area(id_area)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-LOCK TABLES `tarefa` WRITE;
-/*!40000 ALTER TABLE `tarefa` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tarefa` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+-- Tabela Professores
+CREATE TABLE professor (
+  id_professor INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(100) NOT NULL,
+  sobrenome VARCHAR(100) NOT NULL,
+  senha VARCHAR(45) NOT NULL,
+  cpf VARCHAR(11) NOT NULL,
+  imagem VARCHAR(255),
+  PRIMARY KEY (id_professor),
+  UNIQUE KEY (cpf)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+-- Tabela Professor-Disciplina (Associa professores às disciplinas que lecionam)
+CREATE TABLE professor_disciplina (
+  id_professor_disciplina INT NOT NULL AUTO_INCREMENT,
+  fk_id_professor INT NOT NULL,
+  fk_id_disciplina INT NOT NULL,
+  PRIMARY KEY (id_professor_disciplina),
+  FOREIGN KEY (fk_id_professor) REFERENCES professor(id_professor),
+  FOREIGN KEY (fk_id_disciplina) REFERENCES disciplina(id_disciplina)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Dump completed on 2024-10-07 17:37:59
+-- Tabela Turmas (Associa uma turma à disciplina e ao professor)
+CREATE TABLE turma (
+  id_turma INT NOT NULL AUTO_INCREMENT,
+  nome_turma VARCHAR(100) NOT NULL,
+  fk_id_professor_disciplina INT NOT NULL,
+  PRIMARY KEY (id_turma),
+  FOREIGN KEY (fk_id_professor_disciplina) REFERENCES professor_disciplina(id_professor_disciplina)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Tabela Aluno-Turma (Associa alunos às turmas)
+CREATE TABLE aluno_turma (
+  fk_id_aluno INT NOT NULL,
+  fk_id_turma INT NOT NULL,
+  PRIMARY KEY (fk_id_aluno, fk_id_turma),
+  FOREIGN KEY (fk_id_aluno) REFERENCES alunos(id_alunos),
+  FOREIGN KEY (fk_id_turma) REFERENCES turma(id_turma)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Tabela Tarefas (Associa tarefas a uma turma e uma disciplina específica)
+CREATE TABLE tarefa (
+  id_tarefa INT NOT NULL AUTO_INCREMENT,
+  nome_tarefa VARCHAR(100) NOT NULL,
+  descricao TEXT NOT NULL,
+  data_entrega DATE NOT NULL,
+  fk_id_turma INT NOT NULL,
+  PRIMARY KEY (id_tarefa),
+  FOREIGN KEY (fk_id_turma) REFERENCES turma(id_turma)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Tabela Notas (Associa notas aos alunos para cada tarefa)
+CREATE TABLE notas (
+  id_notas INT NOT NULL AUTO_INCREMENT,
+  nota FLOAT NOT NULL,
+  fk_id_aluno INT NOT NULL,
+  fk_id_tarefa INT NOT NULL,
+  PRIMARY KEY (id_notas),
+  FOREIGN KEY (fk_id_aluno) REFERENCES alunos(id_alunos),
+  FOREIGN KEY (fk_id_tarefa) REFERENCES tarefa(id_tarefa)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Populando tabela Alunos
+INSERT INTO alunos (nome, sobrenome, cpf, senha, imagem) VALUES
+('Lucas', 'Mendes', '12345678900', 'senhaLucas', ''),
+('Mariana', 'Silva', '98765432100', 'senhaMariana', ''),
+('Carlos', 'Santos', '45678912300', 'senhaCarlos', ''),
+('Ana', 'Oliveira', '32165498700', 'senhaAna', '');
+
+-- Populando tabela Área
+INSERT INTO area (nome, descricao) VALUES
+('Ciências Exatas', 'Área relacionada a disciplinas de exatas'),
+('Ciências Humanas', 'Área relacionada a disciplinas humanas'),
+('Ciências Biológicas', 'Área relacionada a biologia');
+
+-- Populando tabela Disciplina
+INSERT INTO disciplina (nome_disciplina, fk_id_area) VALUES
+('Matemática', 1),
+('Física', 1),
+('História', 2),
+('Biologia', 3);
+
+-- Populando tabela Professores
+INSERT INTO professor (nome, sobrenome, cpf, senha, imagem) VALUES
+('Pedro', 'Almeida', '11111111111', 'senhaPedro', ''),
+('Joana', 'Martins', '22222222222', 'senhaJoana', ''),
+('Roberto', 'Gomes', '33333333333', 'senhaRoberto', '');
+
+-- Populando tabela Professor-Disciplina
+INSERT INTO professor_disciplina (fk_id_professor, fk_id_disciplina) VALUES
+(1, 1), -- Pedro leciona Matemática
+(1, 2), -- Pedro leciona Física
+(2, 3), -- Joana leciona História
+(3, 4); -- Roberto leciona Biologia
+
+-- Populando tabela Turma
+INSERT INTO turma (nome_turma, fk_id_professor_disciplina) VALUES
+('Turma A - Matemática', 1), -- Pedro leciona para a Turma A em Matemática
+('Turma A - Física', 2), -- Pedro leciona para a Turma A em Física
+('Turma B - História', 3), -- Joana leciona para a Turma B em História
+('Turma C - Biologia', 4); -- Roberto leciona para a Turma C em Biologia
+
+-- Populando tabela Aluno-Turma
+INSERT INTO aluno_turma (fk_id_aluno, fk_id_turma) VALUES
+(1, 1), -- Lucas na Turma A - Matemática
+(1, 2), -- Lucas na Turma A - Física
+(2, 3), -- Mariana na Turma B - História
+(3, 4), -- Carlos na Turma C - Biologia
+(4, 1); -- Ana na Turma A - Matemática
+
+-- Populando tabela Tarefas
+INSERT INTO tarefa (nome_tarefa, descricao, data_entrega, fk_id_turma) VALUES
+('Trabalho de Álgebra', 'Entregar lista de exercícios', '2024-10-15', 1), -- Matemática
+('Experimento de Física', 'Relatório sobre experiência de gravidade', '2024-10-20', 2), -- Física
+('Trabalho sobre Revolução Industrial', 'Pesquisa sobre revoluções', '2024-10-25', 3), -- História
+('Relatório de Ecossistemas', 'Análise de um ecossistema local', '2024-11-01', 4); -- Biologia
+
+-- Populando tabela Notas
+INSERT INTO notas (nota, fk_id_aluno, fk_id_tarefa) VALUES
+(8.5, 1, 1), -- Lucas - Trabalho de Álgebra
+(7.0, 1, 2), -- Lucas - Experimento de Física
+(9.0, 2, 3), -- Mariana - Trabalho sobre Revolução Industrial
+(6.5, 3, 4), -- Carlos - Relatório de Ecossistemas
+(9.0, 4, 1); -- Ana - Trabalho de Álgebra
+
+
+
+-- Inserindo professores para as novas disciplinas
+INSERT INTO professor (nome, sobrenome, cpf, senha, imagem) VALUES
+('Onofre', 'Silva', '44444444444', 'senhaOnofre', ''),
+('Roberval', 'Souza', '55555555555', 'senhaRoberval', ''),
+('Lambarildo', 'Peixe', '66666666666', 'senhaLambarildo', ''),
+('Fredegunda', 'Oliveira', '77777777777', 'senhaFredegunda', '');
+
+-- Inserindo as disciplinas relacionadas
+INSERT INTO disciplina (nome_disciplina, fk_id_area) VALUES
+('Banco de Dados', 1), -- Banco de Dados faz parte de Ciências Exatas
+('Modelagem de Dados', 1), -- Modelagem de Dados faz parte de Ciências Exatas
+('Desenvolvimento de Sistemas', 1), -- Desenvolvimento de Sistemas faz parte de Ciências Exatas
+('Programação de Aplicativos', 1); -- Programação de Aplicativos faz parte de Ciências Exatas
+
+-- Relacionando professores com suas disciplinas
+INSERT INTO professor_disciplina (fk_id_professor, fk_id_disciplina) VALUES
+((SELECT id_professor FROM professor WHERE cpf = '44444444444'), (SELECT id_disciplina FROM disciplina WHERE nome_disciplina = 'Banco de Dados')),
+((SELECT id_professor FROM professor WHERE cpf = '55555555555'), (SELECT id_disciplina FROM disciplina WHERE nome_disciplina = 'Modelagem de Dados')),
+((SELECT id_professor FROM professor WHERE cpf = '66666666666'), (SELECT id_disciplina FROM disciplina WHERE nome_disciplina = 'Desenvolvimento de Sistemas')),
+((SELECT id_professor FROM professor WHERE cpf = '77777777777'), (SELECT id_disciplina FROM disciplina WHERE nome_disciplina = 'Programação de Aplicativos'));
+
+-- Inserindo a nova turma "3º Módulo Desenvolvimento de Sistemas"
+INSERT INTO turma (nome_turma, fk_id_professor_disciplina) VALUES
+('3º Módulo Desenvolvimento de Sistemas - Banco de Dados', (SELECT fk_id_professor FROM professor_disciplina WHERE fk_id_disciplina = (SELECT id_disciplina FROM disciplina WHERE nome_disciplina = 'Banco de Dados'))),
+('3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados', (SELECT fk_id_professor FROM professor_disciplina WHERE fk_id_disciplina = (SELECT id_disciplina FROM disciplina WHERE nome_disciplina = 'Modelagem de Dados'))),
+('3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas', (SELECT fk_id_professor FROM professor_disciplina WHERE fk_id_disciplina = (SELECT id_disciplina FROM disciplina WHERE nome_disciplina = 'Desenvolvimento de Sistemas'))),
+('3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos', (SELECT fk_id_professor FROM professor_disciplina WHERE fk_id_disciplina = (SELECT id_disciplina FROM disciplina WHERE nome_disciplina = 'Programação de Aplicativos')));
+
+
+
+-- Inserir 20 alunos
+INSERT INTO alunos (nome, sobrenome, cpf, senha, imagem) VALUES
+('Lucas', 'Pereira', '11111111111', 'senhaLucas', 'url_imagem_lucas'),
+('Mariana', 'Souza', '22222222222', 'senhaMariana', 'url_imagem_mariana'),
+('João', 'Silva', '33333333333', 'senhaJoao', 'url_imagem_joao'),
+('Ana', 'Costa', '44444444444', 'senhaAna', 'url_imagem_ana'),
+('Carlos', 'Mendes', '55555555555', 'senhaCarlos', 'url_imagem_carlos'),
+('Beatriz', 'Almeida', '66666666666', 'senhaBeatriz', 'url_imagem_beatriz'),
+('Pedro', 'Santos', '77777777777', 'senhaPedro', 'url_imagem_pedro'),
+('Julia', 'Lima', '88888888888', 'senhaJulia', 'url_imagem_julia'),
+('Renato', 'Gomes', '99999999999', 'senhaRenato', 'url_imagem_renato'),
+('Fernanda', 'Ferreira', '10101010101', 'senhaFernanda', 'url_imagem_fernanda'),
+('Ricardo', 'Nunes', '20202020202', 'senhaRicardo', 'url_imagem_ricardo'),
+('Paula', 'Oliveira', '30303030303', 'senhaPaula', 'url_imagem_paula'),
+('Gabriel', 'Martins', '40404040404', 'senhaGabriel', 'url_imagem_gabriel'),
+('Isabela', 'Barros', '50505050505', 'senhaIsabela', 'url_imagem_isabela'),
+('Leonardo', 'Azevedo', '60606060606', 'senhaLeonardo', 'url_imagem_leonardo'),
+('Camila', 'Rocha', '70707070707', 'senhaCamila', 'url_imagem_camila'),
+('Rafael', 'Cardoso', '80808080808', 'senhaRafael', 'url_imagem_rafael'),
+('Larissa', 'Silveira', '90909090909', 'senhaLarissa', 'url_imagem_larissa'),
+('Thiago', 'Monteiro', '12121212121', 'senhaThiago', 'url_imagem_thiago'),
+('Sofia', 'Moreira', '13131313131', 'senhaSofia', 'url_imagem_sofia');
+
+
+-- Associar alunos à turma 3º Módulo Desenvolvimento de Sistemas
+INSERT INTO aluno_turma (fk_id_aluno, fk_id_turma) VALUES
+((SELECT id_alunos FROM alunos WHERE cpf = '11111111111'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '22222222222'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '33333333333'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '44444444444'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '55555555555'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '66666666666'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '77777777777'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '88888888888'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '99999999999'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '10101010101'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '20202020202'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '30303030303'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '40404040404'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '50505050505'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '60606060606'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '70707070707'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '80808080808'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '90909090909'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '12121212121'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '13131313131'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Banco de Dados')),
+
+
+((SELECT id_alunos FROM alunos WHERE cpf = '11111111111'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '22222222222'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '33333333333'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '44444444444'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '55555555555'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '66666666666'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '77777777777'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '88888888888'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '99999999999'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '10101010101'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '20202020202'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '30303030303'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '40404040404'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '50505050505'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '60606060606'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '70707070707'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '80808080808'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '90909090909'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '12121212121'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+((SELECT id_alunos FROM alunos WHERE cpf = '13131313131'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Modelagem de Dados')),
+
+
+
+((SELECT id_alunos FROM alunos WHERE cpf = '11111111111'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '22222222222'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '33333333333'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '44444444444'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '55555555555'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '66666666666'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '77777777777'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '88888888888'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '99999999999'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '10101010101'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '20202020202'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '30303030303'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '40404040404'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '50505050505'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '60606060606'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '70707070707'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '80808080808'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '90909090909'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '12121212121'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+((SELECT id_alunos FROM alunos WHERE cpf = '13131313131'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Desenvolvimento de Sistemas')),
+
+
+
+((SELECT id_alunos FROM alunos WHERE cpf = '11111111111'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '22222222222'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '33333333333'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '44444444444'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '55555555555'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '66666666666'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '77777777777'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '88888888888'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '99999999999'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '10101010101'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '20202020202'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '30303030303'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '40404040404'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '50505050505'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '60606060606'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '70707070707'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '80808080808'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '90909090909'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '12121212121'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos')),
+((SELECT id_alunos FROM alunos WHERE cpf = '13131313131'), (SELECT id_turma FROM turma WHERE nome_turma = '3º Módulo Desenvolvimento de Sistemas - Programação de Aplicativos'));
+
